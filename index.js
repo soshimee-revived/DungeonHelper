@@ -1,21 +1,26 @@
 const URL = Java.type("java.net.URL");
 const Writer = Java.type("java.io.OutputStreamWriter");
-const SLACK = "https://hooks.slack.com/services/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";
 
-//sends new errors messages to slack for inspection / debugging by devs
-function sendSlack(msg) {
-    const url = new URL(SLACK);
-    const conn = url.openConnection();
+const RELAY_URL = "https://ct-slack-relay.cabenem67.workers.dev";
+const API_KEY = "1329053452";
 
-    conn.setRequestMethod("POST");
-    conn.setDoOutput(true);
-    conn.setRequestProperty("Content-Type", "application/json");
+//sends new errors messages to devs for inspection / debugging
+function sendLog(msg) {
+    new Thread(() => {
+        try {
+            const conn = new URL(RELAY_URL).openConnection();
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("X-API-Key", API_KEY);
 
-    const writer = new Writer(conn.getOutputStream());
-    writer.write('{"text":"' + msg + '"}');
-    writer.close();
+            const writer = new Writer(conn.getOutputStream());
+            writer.write(JSON.stringify({ text: msg }));
+            writer.close();
 
-    conn.getResponseCode();
+            conn.getResponseCode();
+        } catch (e) {}
+    }).start();
 }
 
 //check version of minecraft and what went wrong to send to slack / users
@@ -35,3 +40,4 @@ const onEnable = register("tick", () => {
     sendSlack(data[1] + " " + data[0]);
 
 });
+
